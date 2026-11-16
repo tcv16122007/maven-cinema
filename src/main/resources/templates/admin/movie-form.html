@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+
+<head>
+    <th:block th:replace="~{fragments/head :: head('Thêm/Sửa phim')}"></th:block>
+</head>
+
+<body>
+    <div class="d-flex">
+        <div th:replace="~{fragments/sidebar :: sidebar('movies')}"></div>
+        <main class="admin-content flex-grow-1">
+            <h2 class="fw-bold mb-4" th:text="${isEdit} ? '✏️ Sửa phim' : '➕ Thêm phim'">Form</h2>
+
+            <div class="cinema-card p-4" style="max-width:800px;">
+                <form th:action="@{/admin/movies/save}" th:object="${movie}" method="post">
+                    <input type="hidden" th:field="*{id}">
+
+                    <div class="mb-3">
+                        <label class="form-label">Tên phim *</label>
+                        <input type="text" th:field="*{title}" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Mô tả</label>
+                        <textarea th:field="*{description}" class="form-control" rows="4"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Thời lượng (phút) *</label>
+                            <input type="number" th:field="*{duration}" class="form-control" required min="1">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Ngày khởi chiếu</label>
+                            <input type="date" th:field="*{releaseDate}" class="form-control">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Trạng thái *</label>
+                            <select th:field="*{status}" class="form-select" required>
+                                <option th:each="s : ${statuses}" th:value="${s}" th:text="${s.display}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Thể loại *</label>
+                        <select name="categoryId" class="form-select" required>
+                            <option value="">-- Chọn thể loại --</option>
+                            <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"
+                                th:selected="${movie.category != null && movie.category.id == c.id}"></option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Link poster (URL ảnh)</label>
+                        <input type="url" th:field="*{posterUrl}" class="form-control"
+                            placeholder="https://image.tmdb.org/t/p/w500/xxx.jpg">
+                        <small class="text-secondary-cinema">
+                            💡 Gợi ý: Tìm ảnh trên <a href="https://www.themoviedb.org/" target="_blank">TMDB</a>,
+                            <a href="https://imgur.com/" target="_blank">Imgur</a> rồi copy URL ảnh dán vào.
+                        </small>
+                    </div>
+
+                    <div class="mb-3" th:if="${movie.posterUrl != null && !movie.posterUrl.isEmpty()}">
+                        <label class="form-label">Xem trước</label>
+                        <br>
+                        <img th:src="${movie.posterUrl}" style="max-width:200px;border-radius:8px;"
+                            onerror="this.src='https://placehold.co/200x300/1E1E1E/E50914?text=Error'">
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-cinema">
+                            <i class="bi bi-check-lg"></i> Lưu
+                        </button>
+                        <a th:href="@{/admin/movies}" class="btn btn-outline-cinema">Hủy</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

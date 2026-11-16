@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+
+<head>
+    <th:block th:replace="~{fragments/head :: head('Quản lý vé')}"></th:block>
+</head>
+
+<body>
+    <div class="d-flex">
+        <div th:replace="~{fragments/sidebar :: sidebar('tickets')}"></div>
+        <main class="admin-content flex-grow-1">
+            <h2 class="fw-bold mb-4">🎟️ Quản lý vé (Check-in)</h2>
+
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <div class="cinema-card p-3">
+                <table class="table table-cinema">
+                    <thead>
+                        <tr>
+                            <th>Mã</th>
+                            <th>Khách</th>
+                            <th>Phim</th>
+                            <th>Suất</th>
+                            <th>Ghế</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="t : ${tickets}">
+                            <td>#<span th:text="${t.id}"></span></td>
+                            <td th:text="${t.user.fullName}"></td>
+                            <td th:text="${t.showtime.movie.title}"></td>
+                            <td th:text="${#temporals.format(t.showtime.startTime, 'HH:mm dd/MM')}"></td>
+                            <td><strong th:text="${t.seatNumber}"></strong></td>
+                            <td>
+                                <span th:if="${t.status.name() == 'PAID'}" class="badge-cinema badge-success">Đã
+                                    TT</span>
+                                <span th:if="${t.status.name() == 'CHECKED_IN'}" class="badge-cinema badge-warning">Đã
+                                    vào</span>
+                                <span th:if="${t.status.name() == 'CANCELLED'}" class="badge-cinema badge-secondary">Đã
+                                    hủy</span>
+                            </td>
+                            <td>
+                                <form th:if="${t.status.name() == 'PAID'}"
+                                    th:action="@{/staff/tickets/checkin/{id}(id=${t.id})}" method="post">
+                                    <button class="btn btn-sm btn-cinema">Check-in</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

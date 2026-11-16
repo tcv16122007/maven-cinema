@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+
+<head>
+    <th:block th:replace="~{fragments/head :: head('Đăng nhập')}"></th:block>
+</head>
+
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <h1><i class="bi bi-camera-reels-fill"></i> RAVEN CINEMA</h1>
+            <p class="text-center text-secondary-cinema mb-4">Đăng nhập để đặt vé</p>
+
+            <div th:if="${param.error}" class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle-fill"></i> Sai tên đăng nhập hoặc mật khẩu
+            </div>
+            <div th:if="${param.logout}" class="alert alert-success">
+                <i class="bi bi-check-circle-fill"></i> Đã đăng xuất thành công
+            </div>
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+            <form th:action="@{/auth/login}" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Tên đăng nhập</label>
+                    <input type="text" name="username" class="form-control" required autofocus
+                        placeholder="admin / staff / user">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Mật khẩu</label>
+                    <input type="password" name="password" class="form-control" required placeholder="123456">
+                </div>
+                <button type="submit" class="btn btn-cinema w-100 mb-3">Đăng nhập</button>
+            </form>
+
+            <p class="text-center text-secondary-cinema small mb-0">
+                Chưa có tài khoản? <a th:href="@{/auth/register}">Đăng ký ngay</a>
+            </p>
+            <p class="text-center text-secondary-cinema small mt-2">
+                <a th:href="@{/}"><i class="bi bi-arrow-left"></i> Về trang chủ</a>
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

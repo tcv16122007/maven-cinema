@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <nav th:fragment="navbar" class="navbar navbar-expand-lg cinema-navbar">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="bi bi-camera-reels-fill"></i> RAVEN CINEMA
+            </a>
+            <button class="navbar-toggler border-secondary" type="button" data-bs-toggle="collapse"
+                data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/movies}">Phim</a></li>
+                    <li class="nav-item" th:if="${currentUser != null}">
+                        <a class="nav-link" th:href="@{/bookings}">Vé của tôi</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- CHƯA ĐĂNG NHẬP -->
+                    <li class="nav-item" th:if="${currentUser == null}">
+                        <a class="nav-link" th:href="@{/auth/login}">Đăng nhập</a>
+                    </li>
+                    <li class="nav-item" th:if="${currentUser == null}">
+                        <a class="btn btn-cinema btn-sm ms-2" th:href="@{/auth/register}">Đăng ký</a>
+                    </li>
+
+                    <!-- ĐÃ ĐĂNG NHẬP -->
+                    <li class="nav-item dropdown" th:if="${currentUser != null}">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i>
+                            <span
+                                th:text="${currentUser.fullName != null ? currentUser.fullName : currentUser.username}">User</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+                            <!-- Nếu là ADMIN -->
+                            <li th:if="${currentUser.role.name() == 'ADMIN'}">
+                                <a class="dropdown-item" th:href="@{/admin/dashboard}">
+                                    <i class="bi bi-speedometer2"></i> Quản trị
+                                </a>
+                            </li>
+                            <!-- Nếu là STAFF hoặc ADMIN -->
+                            <li th:if="${currentUser.role.name() == 'STAFF' || currentUser.role.name() == 'ADMIN'}">
+                                <a class="dropdown-item" th:href="@{/staff/tickets}">
+                                    <i class="bi bi-clipboard-check"></i> Quầy vé
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <form th:action="@{/auth/logout}" method="post" class="d-inline">
+                                    <button type="submit" class="dropdown-item text-danger">
+                                        <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</body>
+
+</html>

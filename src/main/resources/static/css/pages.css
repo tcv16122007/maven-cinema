@@ -1,0 +1,83 @@
+/* Auth (Đăng nhập/Đăng ký) */
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.auth-card {
+    background: var(--cinema-card);
+    border: 1px solid var(--cinema-border);
+    border-radius: 12px;
+    padding: 40px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+.auth-card h1 {
+    color: var(--cinema-accent);
+    text-align: center;
+    margin-bottom: 8px;
+    font-weight: 800;
+}
+
+/* Seat Grid */
+.seat-grid {
+    display: grid;
+    gap: 8px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.seat {
+    width: 36px;
+    height: 36px;
+    border-radius: 4px 4px 8px 8px;
+    border: 1px solid var(--cinema-border);
+    background: #2a2a2a;
+    color: var(--cinema-text-secondary);
+    cursor: pointer;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    transition: background 0.15s;
+}
+
+.seat:hover:not(.occupied) {
+    background: #3a3a3a;
+}
+
+.seat.selected {
+    background: var(--cinema-accent);
+    border-color: var(--cinema-accent);
+    color: white;
+}
+
+.seat.occupied {
+    background: #444;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.seat-legend {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin: 16px 0;
+    font-size: 13px;
+    color: var(--cinema-text-secondary);
+}
+
+.seat-legend .box {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    margin-right: 6px;
+    vertical-align: middle;
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <div th:fragment="sidebar(active)" class="admin-sidebar">
+        <div class="brand"><i class="bi bi-camera-reels-fill"></i> RAVEN ADMIN</div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${active == 'dashboard'} ? 'active'" th:href="@{/admin/dashboard}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${active == 'movies'} ? 'active'" th:href="@{/admin/movies}">
+                    <i class="bi bi-film"></i> Quản lý Phim
+                </a>
+            </li>
+            <!-- Sẽ làm ở bước sau: Phòng chiếu, Suất chiếu -->
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${active == 'tickets'} ? 'active'" th:href="@{/admin/tickets}">
+                    <i class="bi bi-ticket-perforated"></i> Quản lý Vé
+                </a>
+            </li>
+            <li class="nav-item mt-4">
+                <a class="nav-link text-danger" th:href="@{/}">
+                    <i class="bi bi-arrow-left"></i> Về trang chủ
+                </a>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

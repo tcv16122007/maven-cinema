@@ -1,0 +1,34 @@
+:root {
+    --cinema-bg: #121212;
+    --cinema-card: #1E1E1E;
+    --cinema-accent: #E50914;
+    --cinema-accent-hover: #B8070F;
+    --cinema-text: #FFFFFF;
+    --cinema-text-secondary: #AAAAAA;
+    --cinema-border: #333333;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--cinema-bg);
+    color: var(--cinema-text);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    min-height: 100vh;
+    margin: 0;
+}
+
+a {
+    color: var(--cinema-accent);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--cinema-accent-hover);
+}
+
+.text-secondary-cinema {
+    color: var(--cinema-text-secondary) !important;
+}

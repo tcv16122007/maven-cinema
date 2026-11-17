@@ -24,25 +24,27 @@
     <!-- Now showing -->
     <section class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="h3 fw-bold mb-0">🎬 Phim đang chiếu</h2>
+            <h2 class="h3 fw-bold mb-0 text-white">🎬 Phim đang chiếu</h2>
             <a th:href="@{/movies}" class="btn btn-outline-cinema btn-sm">Xem tất cả <i
                     class="bi bi-arrow-right"></i></a>
         </div>
 
-        <div class="row g-4" th:if="${!#lists.isEmpty(nowShowing)}">
+        <div class="row g-4" th:if="${not #lists.isEmpty(nowShowing)}">
             <div class="col-6 col-md-4 col-lg-3" th:each="movie : ${nowShowing}">
-                <a th:href="@{/movies/{id}(id=${movie.id})}" class="text-decoration-none">
-                    <div class="cinema-card h-100">
-                        <img th:src="${movie.posterUrl}" th:alt="${movie.title}" class="movie-poster">
-                        <div class="p-3">
-                            <h5 class="mb-2 text-white" th:text="${movie.title}">Title</h5>
-                            <p class="text-secondary-cinema small mb-0">
-                                <i class="bi bi-clock"></i>
-                                <span th:text="${movie.duration}">120</span> phút
-                            </p>
-                        </div>
+                <!-- SỬA TẠI ĐÂY: Dùng onclick để chuyển trang -->
+                <div class="cinema-card h-100" style="cursor: pointer;"
+                    th:onclick="'window.location.href=\'' + @{/movies/{id}(id=${movie.id})} + '\''">
+
+                    <img th:src="${movie.posterUrl}" th:alt="${movie.title}" class="movie-poster"
+                        onerror="this.src='https://placehold.co/300x450/1E1E1E/E50914?text=No+Img'">
+                    <div class="p-3">
+                        <h5 class="mb-2 text-white text-truncate" th:text="${movie.title}">Title</h5>
+                        <p class="text-secondary-cinema small mb-0">
+                            <i class="bi bi-clock"></i>
+                            <span th:text="${movie.duration}">120</span> phút
+                        </p>
                     </div>
-                </a>
+                </div>
             </div>
         </div>
         <p th:if="${#lists.isEmpty(nowShowing)}" class="text-secondary-cinema">Chưa có phim đang chiếu.</p>
@@ -50,16 +52,21 @@
 
     <!-- Coming soon -->
     <section class="container pb-5">
-        <h2 class="h3 fw-bold mb-4">🚀 Phim sắp chiếu</h2>
-        <div class="row g-4" th:if="${!#lists.isEmpty(comingSoon)}">
+        <h2 class="h3 fw-bold mb-4 text-white">🚀 Phim sắp chiếu</h2>
+        <div class="row g-4" th:if="${not #lists.isEmpty(comingSoon)}">
             <div class="col-6 col-md-4 col-lg-3" th:each="movie : ${comingSoon}">
-                <div class="cinema-card h-100">
-                    <img th:src="${movie.posterUrl}" th:alt="${movie.title}" class="movie-poster">
+                <!-- SỬA TẠI ĐÂY: Dùng onclick để chuyển trang -->
+                <div class="cinema-card h-100" style="cursor: pointer;"
+                    th:onclick="'window.location.href=\'' + @{/movies/{id}(id=${movie.id})} + '\''">
+
+                    <img th:src="${movie.posterUrl}" th:alt="${movie.title}" class="movie-poster"
+                        onerror="this.src='https://placehold.co/300x450/1E1E1E/E50914?text=No+Img'">
                     <div class="p-3">
-                        <h5 class="mb-2 text-white" th:text="${movie.title}">Title</h5>
+                        <h5 class="mb-2 text-white text-truncate" th:text="${movie.title}">Title</h5>
                         <p class="text-secondary-cinema small mb-0">
                             <i class="bi bi-calendar"></i>
-                            <span th:text="${#temporals.format(movie.releaseDate, 'dd/MM/yyyy')}">01/01/2026</span>
+                            <span
+                                th:text="${movie.releaseDate != null ? #temporals.format(movie.releaseDate, 'dd/MM/yyyy') : 'Sắp ra mắt'}">01/01/2026</span>
                         </p>
                     </div>
                 </div>

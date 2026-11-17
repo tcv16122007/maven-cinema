@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+
+<head>
+    <th:block th:replace="~{fragments/head :: head('Thêm/Sửa thể loại')}"></th:block>
+</head>
+
+<body>
+    <div class="d-flex">
+        <div th:replace="~{fragments/sidebar :: sidebar('categories')}"></div>
+        <main class="admin-content flex-grow-1">
+            <h2 class="fw-bold mb-4">➕ Thêm / Sửa thể loại</h2>
+            <div class="cinema-card p-4" style="max-width:500px;">
+                <form th:action="@{/admin/categories/save}" th:object="${category}" method="post">
+                    <input type="hidden" th:field="*{id}">
+                    <div class="mb-4">
+                        <label class="form-label">Tên thể loại *</label>
+                        <input type="text" th:field="*{name}" class="form-control" required
+                            placeholder="VD: Hoạt hình, Tâm lý...">
+                    </div>
+                    <button type="submit" class="btn btn-cinema">Lưu</button>
+                    <a th:href="@{/admin/categories}" class="btn btn-outline-cinema">Hủy</a>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

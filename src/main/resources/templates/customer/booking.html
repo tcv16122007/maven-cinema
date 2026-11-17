@@ -10,48 +10,53 @@
 
     <div class="container py-5 mt-4">
         <div class="row g-4">
+            <!-- Sơ đồ ghế -->
             <div class="col-md-8">
                 <div class="cinema-card p-4">
-                    <h3 class="mb-3" th:text="${showtime.movie.title}">Tên phim</h3>
+                    <h3 class="mb-3 text-white" th:text="${showtime.movie.title}">Tên phim</h3>
                     <p class="text-secondary-cinema mb-1">
-                        <i class="bi bi-geo-alt-fill text-danger"></i>
-                        <span th:text="${showtime.room.name}">Phòng</span>
+                        <i class="bi bi-geo-alt-fill text-danger"></i> <span
+                            th:text="${showtime.room.name}">Phòng</span>
                         &nbsp;•&nbsp;
-                        <i class="bi bi-clock-fill text-danger"></i>
-                        <span th:text="${#temporals.format(showtime.startTime, 'HH:mm - dd/MM/yyyy')}">Giờ</span>
+                        <i class="bi bi-clock-fill text-danger"></i> <span
+                            th:text="${#temporals.format(showtime.startTime, 'HH:mm - dd/MM/yyyy')}">Giờ</span>
                     </p>
 
-                    <div class="text-center mt-4 mb-3" style="color:#AAAAAA;font-size:13px;">MÀN HÌNH</div>
+                    <div class="text-center mt-4 mb-2" style="color:#AAAAAA;font-size:13px;letter-spacing:2px;">MÀN HÌNH
+                    </div>
                     <div
                         style="height:8px;background:linear-gradient(90deg,transparent,#E50914,transparent);border-radius:4px;margin-bottom:30px;">
                     </div>
 
+                    <!-- Grid ghế -->
                     <div class="seat-grid" th:style="'grid-template-columns: repeat(' + ${cols} + ', 36px);'">
                         <div th:each="seat : ${seats}"
                             th:class="'seat ' + (${#lists.contains(bookedSeats, seat)} ? 'occupied' : '')"
                             th:attr="data-seat=${seat}, data-price=${showtime.price}" th:text="${seat}"></div>
                     </div>
 
+                    <!-- Chú thích -->
                     <div class="seat-legend">
                         <span><span class="box" style="background:#2a2a2a;"></span>Trống</span>
-                        <span><span class="box" style="background:#E50914;"></span>Đã chọn</span>
+                        <span><span class="box" style="background:#E50914;"></span>Đang chọn</span>
                         <span><span class="box" style="background:#444;"></span>Đã đặt</span>
                     </div>
                 </div>
             </div>
 
+            <!-- Thông tin thanh toán -->
             <div class="col-md-4">
                 <div class="cinema-card p-4 sticky-top" style="top:90px;">
-                    <h5 class="mb-3">Thông tin đặt vé</h5>
+                    <h5 class="mb-3 text-white">Thông tin đặt vé</h5>
                     <p class="text-secondary-cinema small mb-1">
                         <i class="bi bi-ticket-perforated"></i> Giá mỗi ghế:
                         <strong style="color:#E50914"
                             th:text="${#numbers.formatDecimal(showtime.price, 0, 0, 'COMMA')} + 'đ'">0đ</strong>
                     </p>
                     <hr style="border-color:#333;">
-                    <p class="mb-1">Ghế đã chọn: <span id="selectedSeats" style="color:#E50914;font-weight:600;">Chưa
-                            chọn</span></p>
-                    <p class="mb-3">Tổng tiền: <span id="totalPrice"
+                    <p class="mb-1 text-white">Ghế đã chọn: <span id="selectedSeats"
+                            style="color:#E50914;font-weight:600;">Chưa chọn</span></p>
+                    <p class="mb-3 text-white">Tổng tiền: <span id="totalPrice"
                             style="color:#E50914;font-size:22px;font-weight:800;">0đ</span></p>
 
                     <form th:action="@{/booking}" method="post" id="bookingForm">

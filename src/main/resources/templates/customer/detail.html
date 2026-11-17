@@ -10,40 +10,49 @@
 
     <div class="container py-5 mt-4">
         <div class="row g-4">
-            <!-- Cột trái: Poster -->
+            <!-- Poster -->
             <div class="col-md-4">
-                <img th:src="${movie.posterUrl}" class="img-fluid rounded shadow w-100" th:alt="${movie.title}">
+                <img th:src="${movie.posterUrl}" class="img-fluid rounded shadow w-100" th:alt="${movie.title}"
+                    onerror="this.src='https://placehold.co/400x600/1E1E1E/E50914?text=No+Poster'">
             </div>
 
-            <!-- Cột phải: Thông tin -->
+            <!-- Thông tin & Lịch chiếu -->
             <div class="col-md-8">
                 <h1 class="fw-bold mb-3 text-white" th:text="${movie.title}">Tên phim</h1>
-                <div class="d-flex gap-3 mb-4 text-secondary-cinema">
-                    <span><i class="bi bi-tag-fill text-danger"></i> <span th:text="${movie.category.name}">Thể
+
+                <div class="d-flex gap-4 mb-4 text-secondary-cinema">
+                    <span><i class="bi bi-tag-fill text-danger"></i> <span
+                            th:text="${movie.category != null ? movie.category.name : 'Đang cập nhật'}">Thể
                             loại</span></span>
                     <span><i class="bi bi-clock-fill text-danger"></i> <span th:text="${movie.duration}">120</span>
                         phút</span>
                     <span><i class="bi bi-calendar-event-fill text-danger"></i> <span
-                            th:text="${#temporals.format(movie.releaseDate, 'dd/MM/yyyy')}">01/01/2026</span></span>
+                            th:text="${movie.releaseDate != null ? #temporals.format(movie.releaseDate, 'dd/MM/yyyy') : 'Sắp ra mắt'}">01/01/2026</span></span>
                 </div>
 
-                <h5 class="fw-bold">Nội dung phim</h5>
+                <h5 class="fw-bold text-white">Nội dung phim</h5>
                 <p class="text-secondary-cinema mb-4" style="line-height: 1.8;" th:text="${movie.description}">Mô tả...
                 </p>
 
-                <hr class="border-secondary">
+                <hr style="border-color:#333;">
 
-                <h5 class="fw-bold mb-3">Lịch chiếu</h5>
-                <div class="d-flex flex-wrap gap-2" th:if="${!#lists.isEmpty(showtimes)}">
-                    <a th:each="st : ${showtimes}" th:href="@{/booking/{id}(id=${st.id})}"
-                        class="btn btn-outline-cinema d-flex flex-column align-items-center py-2 px-3">
-                        <strong th:text="${#temporals.format(st.startTime, 'HH:mm')}">18:00</strong>
-                        <small th:text="${#temporals.format(st.startTime, 'dd/MM')}">16/11</small>
-                        <small th:text="${st.room.name}">Phòng 1</small>
-                    </a>
-                </div>
+                <h5 class="fw-bold mb-3 text-white">🎟️ Chọn suất chiếu</h5>
+
+                <!-- Nếu không có suất chiếu -->
                 <div th:if="${#lists.isEmpty(showtimes)}" class="alert alert-warning">
-                    Hiện tại chưa có suất chiếu cho phim này.
+                    Hiện tại chưa có suất chiếu cho phim này. Vui lòng quay lại sau!
+                </div>
+
+                <!-- Nếu có suất chiếu -->
+                <div class="d-flex flex-wrap gap-3" th:if="${not #lists.isEmpty(showtimes)}">
+                    <a th:each="st : ${showtimes}" th:href="@{/booking/{id}(id=${st.id})}"
+                        class="btn btn-outline-cinema d-flex flex-column align-items-center py-2 px-4 text-decoration-none">
+                        <strong style="font-size: 18px;"
+                            th:text="${#temporals.format(st.startTime, 'HH:mm')}">18:00</strong>
+                        <small class="text-secondary-cinema"
+                            th:text="${#temporals.format(st.startTime, 'dd/MM')}">16/11</small>
+                        <small class="text-secondary-cinema" th:text="${st.room.name}">Phòng 1</small>
+                    </a>
                 </div>
             </div>
         </div>

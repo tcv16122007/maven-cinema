@@ -47,7 +47,7 @@
                         <select name="categoryId" class="form-select" required>
                             <option value="">-- Chọn thể loại --</option>
                             <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"
-                                th:selected="${movie.category != null && movie.category.id == c.id}"></option>
+                                th:selected="${movie.category != null and movie.category.id == c.id}"></option>
                         </select>
                     </div>
 
@@ -55,15 +55,10 @@
                         <label class="form-label">Link poster (URL ảnh)</label>
                         <input type="url" th:field="*{posterUrl}" class="form-control"
                             placeholder="https://image.tmdb.org/t/p/w500/xxx.jpg">
-                        <small class="text-secondary-cinema">
-                            💡 Gợi ý: Tìm ảnh trên <a href="https://www.themoviedb.org/" target="_blank">TMDB</a>,
-                            <a href="https://imgur.com/" target="_blank">Imgur</a> rồi copy URL ảnh dán vào.
-                        </small>
                     </div>
 
-                    <div class="mb-3" th:if="${movie.posterUrl != null && !movie.posterUrl.isEmpty()}">
-                        <label class="form-label">Xem trước</label>
-                        <br>
+                    <div class="mb-3" th:if="${movie.posterUrl != null and !movie.posterUrl.isEmpty()}">
+                        <label class="form-label">Xem trước:</label><br>
                         <img th:src="${movie.posterUrl}" style="max-width:200px;border-radius:8px;"
                             onerror="this.src='https://placehold.co/200x300/1E1E1E/E50914?text=Error'">
                     </div>

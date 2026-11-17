@@ -9,7 +9,7 @@
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
     <div class="container py-5 mt-4">
-        <h2 class="fw-bold mb-4">Vé của tôi</h2>
+        <h2 class="fw-bold mb-4 text-white">Vé của tôi</h2>
 
         <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
         <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
@@ -19,7 +19,7 @@
             <a th:href="@{/movies}" class="btn btn-cinema mt-3">Đặt vé ngay</a>
         </div>
 
-        <div th:if="${!#lists.isEmpty(tickets)}" class="table-responsive">
+        <div th:if="${not #lists.isEmpty(tickets)}" class="table-responsive">
             <table class="table table-cinema">
                 <thead>
                     <tr>
@@ -35,21 +35,21 @@
                 <tbody>
                     <tr th:each="t : ${tickets}">
                         <td>#<span th:text="${t.id}">1</span></td>
-                        <td th:text="${t.showtime.movie.title}">Phim</td>
+                        <td class="fw-semibold text-white" th:text="${t.showtime.movie.title}">Phim</td>
                         <td>
                             <span th:text="${#temporals.format(t.showtime.startTime, 'HH:mm dd/MM/yyyy')}">--</span>
                             <br>
                             <small class="text-secondary-cinema" th:text="${t.showtime.room.name}">Phòng</small>
                         </td>
-                        <td><strong th:text="${t.seatNumber}">A1</strong></td>
+                        <td><strong style="color:#E50914;" th:text="${t.seatNumber}">A1</strong></td>
                         <td th:text="${#numbers.formatDecimal(t.totalPrice, 0, 0, 'COMMA')} + 'đ'">0đ</td>
                         <td>
                             <span th:if="${t.status.name() == 'PAID'}" class="badge-cinema badge-success">Đã thanh
                                 toán</span>
                             <span th:if="${t.status.name() == 'CANCELLED'}" class="badge-cinema badge-secondary">Đã
                                 hủy</span>
-                            <span th:if="${t.status.name() == 'PENDING'}" class="badge-cinema badge-warning">Chờ thanh
-                                toán</span>
+                            <span th:if="${t.status.name() == 'PENDING'}" class="badge-cinema badge-warning">Chờ
+                                TT</span>
                         </td>
                         <td>
                             <form th:if="${t.status.name() == 'PAID'}" th:action="@{/bookings/cancel/{id}(id=${t.id})}"

@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         const arr = Array.from(selected).sort();
         selectedSeatsEl.textContent = arr.join(', ');
+
+        // Lấy giá vé từ attribute data-price
         const price = parseFloat(document.querySelector('.seat').dataset.price) || 0;
         const total = arr.length * price;
         totalPriceEl.textContent = total.toLocaleString('vi-VN') + 'đ';

@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin/movies")
 public class AdminMovieController {
@@ -24,12 +26,14 @@ public class AdminMovieController {
 
     @GetMapping
     public String list(@RequestParam(required = false) String keyword, Model model) {
+        List<Movie> movieList;
         if (keyword != null && !keyword.isBlank()) {
-            model.addAttribute("movies", movieRepo.findByTitleContainingIgnoreCase(keyword));
+            movieList = movieRepo.findByTitleContainingIgnoreCase(keyword);
             model.addAttribute("keyword", keyword);
         } else {
-            model.addAttribute("movies", movieRepo.findAll());
+            movieList = movieRepo.findAll();
         }
+        model.addAttribute("movies", movieList);
         return "admin/movies";
     }
 
@@ -54,19 +58,15 @@ public class AdminMovieController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute Movie movie,
-                       @RequestParam Long categoryId,
-                       RedirectAttributes ra) {
+    public String save(@ModelAttribute Movie movie, @RequestParam Long categoryId, RedirectAttributes ra) {
         Category cat = categoryRepo.findById(categoryId).orElse(null);
         if (cat == null) {
             ra.addFlashAttribute("error", "Vui lòng chọn thể loại");
-            return "redirect:/admin/movies";
+            return "redirect:/admin/movies/new";
         }
         movie.setCategory(cat);
         movieRepo.save(movie);
-        ra.addFlashAttribute("success", movie.getId() == null
-                ? "Đã thêm phim mới: " + movie.getTitle()
-                : "Đã cập nhật: " + movie.getTitle());
+        ra.addFlashAttribute("success", movie.getId() == null ? "Đã thêm: " + movie.getTitle() : "Đã cập nhật: " + movie.getTitle());
         return "redirect:/admin/movies";
     }
 
@@ -74,10 +74,12 @@ public class AdminMovieController {
     public String delete(@PathVariable Long id, RedirectAttributes ra) {
         Movie m = movieRepo.findById(id).orElse(null);
         if (m != null) {
-            movieRepo.delete(m);
-            ra.addFlashAttribute("success", "Đã xóa: " + m.getTitle());
-        } else {
-            ra.addFlashAttribute("error", "Không tìm thấy phim");
+            try {
+                movieRepo.delete(m);
+                ra.addFlashAttribute("success", "Đã xóa: " + m.getTitle());
+            } catch (Exception e) {
+                ra.addFlashAttribute("error", "Không thể xóa vì phim đang có suất chiếu!");
+            }
         }
         return "redirect:/admin/movies";
     }

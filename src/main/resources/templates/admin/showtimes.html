@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+
+<head>
+    <th:block th:replace="~{fragments/head :: head('Quản lý suất chiếu')}"></th:block>
+</head>
+
+<body>
+    <div class="d-flex">
+        <div th:replace="~{fragments/sidebar :: sidebar('showtimes')}"></div>
+        <main class="admin-content flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0">📅 Quản lý suất chiếu</h2>
+                <a th:href="@{/admin/showtimes/new}" class="btn btn-cinema"><i class="bi bi-plus-lg"></i> Thêm suất</a>
+            </div>
+
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <div class="cinema-card p-3">
+                <table class="table table-cinema">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Phim</th>
+                            <th>Phòng</th>
+                            <th>Thời gian</th>
+                            <th>Giá vé</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="st : ${showtimes}">
+                            <td th:text="${st.id}">1</td>
+                            <td class="fw-semibold" th:text="${st.movie.title}">Phim</td>
+                            <td th:text="${st.room.name}">Phòng</td>
+                            <td th:text="${#temporals.format(st.startTime, 'HH:mm dd/MM/yyyy')}">-</td>
+                            <td style="color:#E50914; font-weight:bold;"
+                                th:text="${#numbers.formatDecimal(st.price, 0, 0, 'COMMA')} + 'đ'">0đ</td>
+                            <td>
+                                <a th:href="@{/admin/showtimes/edit/{id}(id=${st.id})}"
+                                    class="btn btn-sm btn-outline-cinema"><i class="bi bi-pencil"></i> Sửa</a>
+                                <form th:action="@{/admin/showtimes/delete/{id}(id=${st.id})}" method="post"
+                                    class="d-inline" onsubmit="return confirm('Xóa suất chiếu này?');">
+                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i>
+                                        Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

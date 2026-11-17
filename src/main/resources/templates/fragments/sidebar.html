@@ -15,7 +15,23 @@
                     <i class="bi bi-film"></i> Quản lý Phim
                 </a>
             </li>
-            <!-- Sẽ làm ở bước sau: Phòng chiếu, Suất chiếu -->
+            <!-- Đã thêm mục Thể loại ở đây -->
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${active == 'categories'} ? 'active'"
+                    th:href="@{/admin/categories}">
+                    <i class="bi bi-tags"></i> Thể loại
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${active == 'rooms'} ? 'active'" th:href="@{/admin/rooms}">
+                    <i class="bi bi-door-open"></i> Phòng chiếu
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${active == 'showtimes'} ? 'active'" th:href="@{/admin/showtimes}">
+                    <i class="bi bi-calendar-event"></i> Suất chiếu
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" th:classappend="${active == 'tickets'} ? 'active'" th:href="@{/admin/tickets}">
                     <i class="bi bi-ticket-perforated"></i> Quản lý Vé

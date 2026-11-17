@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+
+<head>
+    <th:block th:replace="~{fragments/head :: head('Thêm/Sửa suất chiếu')}"></th:block>
+</head>
+
+<body>
+    <div class="d-flex">
+        <div th:replace="~{fragments/sidebar :: sidebar('showtimes')}"></div>
+        <main class="admin-content flex-grow-1">
+            <h2 class="fw-bold mb-4" th:text="${isEdit} ? '✏️ Sửa suất chiếu' : '➕ Thêm suất chiếu'">Form</h2>
+            <div class="cinema-card p-4" style="max-width:700px;">
+                <form th:action="@{/admin/showtimes/save}" th:object="${showtime}" method="post">
+                    <input type="hidden" th:field="*{id}">
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Chọn phim *</label>
+                            <select name="movieId" class="form-select" required>
+                                <option value="">-- Chọn phim --</option>
+                                <option th:each="m : ${movies}" th:value="${m.id}" th:text="${m.title}"
+                                    th:selected="${showtime.movie != null && showtime.movie.id == m.id}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Chọn phòng *</label>
+                            <select name="roomId" class="form-select" required>
+                                <option value="">-- Chọn phòng --</option>
+                                <option th:each="r : ${rooms}" th:value="${r.id}"
+                                    th:text="${r.name} + ' (' + ${r.capacity} + ' ghế)'"
+                                    th:selected="${showtime.room != null && showtime.room.id == r.id}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Thời gian chiếu *</label>
+                            <!-- Dùng định dạng yyyy-MM-dd'T'HH:mm cho input datetime-local -->
+                            <input type="datetime-local" th:field="*{startTime}" class="form-control" required
+                                th:value="${showtime.startTime != null ? #temporals.format(showtime.startTime, 'yyyy-MM-dd''T''HH:mm') : ''}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Giá vé (VNĐ) *</label>
+                            <input type="number" th:field="*{price}" class="form-control" required min="0" step="1000"
+                                placeholder="VD: 85000">
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-cinema"><i class="bi bi-check-lg"></i> Lưu</button>
+                        <a th:href="@{/admin/showtimes}" class="btn btn-outline-cinema">Hủy</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

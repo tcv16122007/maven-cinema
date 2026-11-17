@@ -32,6 +32,7 @@ public class BookingController {
         Showtime st = showtimeRepository.findById(showtimeId).orElse(null);
         if (st == null) return "redirect:/movies";
 
+        // Sinh sơ đồ ghế (Mặc định 8 cột)
         int capacity = st.getRoom().getCapacity();
         int cols = 8;
         int rows = (int) Math.ceil((double) capacity / cols);
@@ -45,10 +46,13 @@ public class BookingController {
             }
         }
 
-        // Đã sửa warning Null-safety ở đây (dùng lambda thay vì method reference)
+        // Lấy ghế đã đặt (trừ ghế đã hủy)
+        // SỬA TẠI ĐÂY: Đổi Ticket::getSeatNumber thành lambda t -> t.getSeatNumber()
         List<String> bookedSeats = ticketRepository
                 .findByShowtimeIdAndStatusNot(showtimeId, TicketStatus.CANCELLED)
-                .stream().map(t -> t.getSeatNumber()).toList();
+                .stream()
+                .map(t -> t.getSeatNumber())
+                .toList();
 
         model.addAttribute("showtime", st);
         model.addAttribute("seats", seats);
@@ -65,28 +69,29 @@ public class BookingController {
         Showtime st = showtimeRepository.findById(showtimeId).orElse(null);
         User user = userRepository.findByUsername(auth.getName()).orElse(null);
         if (st == null || user == null) {
-            ra.addFlashAttribute("error", "Không tìm thấy suất chiếu hoặc người dùng");
+            ra.addFlashAttribute("error", "Không tìm thấy thông tin");
             return "redirect:/movies";
         }
 
         String[] seatArr = seats.split(",");
         double total = st.getPrice() * seatArr.length;
 
+        // Kiểm tra trùng ghế
         for (String seat : seatArr) {
-            if (ticketRepository.existsByShowtimeIdAndSeatNumberAndStatusNot(
-                    showtimeId, seat.trim(), TicketStatus.CANCELLED)) {
-                ra.addFlashAttribute("error", "Ghế " + seat + " đã có người đặt");
+            if (ticketRepository.existsByShowtimeIdAndSeatNumberAndStatusNot(showtimeId, seat.trim(), TicketStatus.CANCELLED)) {
+                ra.addFlashAttribute("error", "Ghế " + seat + " đã có người nhanh tay đặt trước!");
                 return "redirect:/booking/" + showtimeId;
             }
         }
 
+        // Lưu vé
         for (String seat : seatArr) {
             Ticket t = Ticket.builder()
                     .user(user)
                     .showtime(st)
                     .seatNumber(seat.trim())
                     .totalPrice(st.getPrice())
-                    .status(TicketStatus.PAID)
+                    .status(TicketStatus.PAID) // Thanh toán luôn
                     .build();
             ticketRepository.save(t);
         }
@@ -108,8 +113,7 @@ public class BookingController {
     public String cancel(@PathVariable Long id, Authentication auth, RedirectAttributes ra) {
         Ticket t = ticketRepository.findById(id).orElse(null);
         User user = userRepository.findByUsername(auth.getName()).orElse(null);
-        if (t != null && user != null && t.getUser().getId().equals(user.getId())
-                && t.getStatus() == TicketStatus.PAID) {
+        if (t != null && user != null && t.getUser().getId().equals(user.getId()) && t.getStatus() == TicketStatus.PAID) {
             t.setStatus(TicketStatus.CANCELLED);
             ticketRepository.save(t);
             ra.addFlashAttribute("success", "Đã hủy vé thành công");

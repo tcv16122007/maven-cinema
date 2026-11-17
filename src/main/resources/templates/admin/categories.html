@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+
+<head>
+    <th:block th:replace="~{fragments/head :: head('Quản lý thể loại')}"></th:block>
+</head>
+
+<body>
+    <div class="d-flex">
+        <div th:replace="~{fragments/sidebar :: sidebar('categories')}"></div>
+        <main class="admin-content flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0">🏷️ Quản lý thể loại</h2>
+                <a th:href="@{/admin/categories/new}" class="btn btn-cinema">
+                    <i class="bi bi-plus-lg"></i> Thêm thể loại
+                </a>
+            </div>
+
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <div class="cinema-card p-3" style="max-width: 600px;">
+                <table class="table table-cinema mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên thể loại</th>
+                            <th style="width:150px">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="c : ${categories}">
+                            <td th:text="${c.id}">1</td>
+                            <td class="fw-semibold text-white" th:text="${c.name}">Hành động</td>
+                            <td>
+                                <a th:href="@{/admin/categories/edit/{id}(id=${c.id})}"
+                                    class="btn btn-sm btn-outline-cinema">Sửa</a>
+                                <form th:action="@{/admin/categories/delete/{id}(id=${c.id})}" method="post"
+                                    class="d-inline" onsubmit="return confirm('Xóa thể loại này?');">
+                                    <button class="btn btn-sm btn-outline-danger">Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

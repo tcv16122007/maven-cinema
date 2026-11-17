@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <div th:fragment="staffSidebar(active)" class="admin-sidebar"
+        style="background: #181818; border-right: 2px solid #E50914;">
+        <div class="brand" style="color: #FFF;"><i class="bi bi-person-badge"></i> STAFF PANEL</div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${active == 'tickets'} ? 'active'" th:href="@{/staff/tickets}">
+                    <i class="bi bi-ticket-detailed"></i> Quầy bán vé
+                </a>
+            </li>
+            <li class="nav-item mt-4">
+                <a class="nav-link text-danger" th:href="@{/}">
+                    <i class="bi bi-house-door"></i> Về trang chủ
+                </a>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

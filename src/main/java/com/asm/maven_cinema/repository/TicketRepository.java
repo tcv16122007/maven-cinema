@@ -18,4 +18,8 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     @Query("SELECT COALESCE(SUM(t.totalPrice), 0) FROM Ticket t WHERE t.status = :status")
     Double sumRevenueByStatus(@Param("status") TicketStatus status);
+
+    // Hàm tìm kiếm vé cho Staff
+    @Query("SELECT t FROM Ticket t WHERE t.user.username LIKE %:kw% OR t.user.fullName LIKE %:kw% OR CAST(t.id AS string) LIKE %:kw%")
+    List<Ticket> searchTickets(@Param("kw") String keyword);
 }

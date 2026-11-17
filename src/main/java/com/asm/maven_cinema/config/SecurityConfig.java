@@ -22,9 +22,14 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
+                // Cho phép Guest xem phim, đăng ký, đăng nhập
                 .requestMatchers("/", "/movies/**", "/css/**", "/js/**", "/images/**", "/auth/**").permitAll()
+                // Khách hàng đặt vé phải đăng nhập
+                .requestMatchers("/booking/**", "/bookings/**").authenticated()
+                // Chỉ ADMIN mới vào được khu vực quản lý
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/staff/**").hasAnyRole("ADMIN", "STAFF")
+                // STAFF và ADMIN mới vào được Quầy vé
+                .requestMatchers("/staff/**").hasAnyRole("STAFF", "ADMIN")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

@@ -15,7 +15,8 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" th:href="@{/}">Trang chủ</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{/movies}">Phim</a></li>
-                    <li class="nav-item" th:if="${currentUser != null}">
+                    <!-- Khách hàng mới thấy Vé của tôi -->
+                    <li class="nav-item" th:if="${currentUser != null && currentUser.role.name() == 'CUSTOMER'}">
                         <a class="nav-link" th:href="@{/bookings}">Vé của tôi</a>
                     </li>
                 </ul>
@@ -39,15 +40,24 @@
                             <!-- Nếu là ADMIN -->
                             <li th:if="${currentUser.role.name() == 'ADMIN'}">
                                 <a class="dropdown-item" th:href="@{/admin/dashboard}">
-                                    <i class="bi bi-speedometer2"></i> Quản trị
+                                    <i class="bi bi-speedometer2"></i> Quản trị (Admin)
                                 </a>
                             </li>
+
                             <!-- Nếu là STAFF hoặc ADMIN -->
                             <li th:if="${currentUser.role.name() == 'STAFF' || currentUser.role.name() == 'ADMIN'}">
                                 <a class="dropdown-item" th:href="@{/staff/tickets}">
-                                    <i class="bi bi-clipboard-check"></i> Quầy vé
+                                    <i class="bi bi-clipboard-check"></i> Quầy vé (Staff)
                                 </a>
                             </li>
+
+                            <!-- Nếu là CUSTOMER -->
+                            <li th:if="${currentUser.role.name() == 'CUSTOMER'}">
+                                <a class="dropdown-item" th:href="@{/bookings}">
+                                    <i class="bi bi-ticket-perforated"></i> Vé của tôi
+                                </a>
+                            </li>
+
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
